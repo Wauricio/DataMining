@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,19 +21,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class DataBase {
     private Connection c;
-   // private  String driver , url,db,dbUser,dbPwd;  
     
     public DataBase(String url,String db , String driver ,String user , String pass)throws Exception{
         c= getConnector(url,db,driver,user,pass);
-        /* this.driver =driver;
-         this.url = url;
-         this.db=db;
-         this.dbUser =user;
-         this.dbPwd =pass;*/
     }
-    
-    
-    
+
     public Connection getConnection() {
         return c;
     }
@@ -60,18 +50,15 @@ public class DataBase {
   
   
   
-/*Descripción DB*/
+/*Db Description*/
     public static  ArrayList<String> getDBTables(Connection conn ) throws SQLException{
             ArrayList<String> meta=new ArrayList<String>();
             DatabaseMetaData dbmd = conn.getMetaData();
                 //String types[] = {"TABLE","VIEW","SYSTEM TABLE","GLOBAL","TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"};
                 String[] types = {"TABLE"};
                 ResultSet rs = dbmd.getTables(null, null, "%", types);
-                while (rs.next()) 
-                {
-                    //System.out.println(rs.getString("TABLE_NAME"));
+                while (rs.next())
                     meta.add(rs.getString("TABLE_NAME").toLowerCase());
-                }
            return meta;
     }
     
@@ -79,7 +66,6 @@ public class DataBase {
  
     
     public static String[] getColumns(Connection conn , String table) throws  SQLException {
-         //Map<String,String> col=new HashMap<String,String>();
         ResultSetMetaData rsmd = conn.createStatement().executeQuery("select * from "+table).getMetaData();
         int numCol = rsmd.getColumnCount();
         String [] clm= new String[numCol];
@@ -96,9 +82,7 @@ public class DataBase {
             col.put(rsmd.getColumnName(i+1).toLowerCase(), rsmd.getColumnTypeName(i+1));
         return col;      
     }    
-    
 
-    
     /*
     public static boolean hasTable(Connection c ,String name) throws Exception{
         ArrayList<String> tables = getDBTables(c);
@@ -119,9 +103,5 @@ public class DataBase {
          }  
          return false;   
     }
-    */
-    
-    
-    
-    
+    */ 
    }

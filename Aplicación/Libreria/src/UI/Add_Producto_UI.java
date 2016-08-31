@@ -46,7 +46,6 @@ public class Add_Producto_UI extends javax.swing.JFrame {
 
         jLabel1.setText("Nuevo Producto");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "b" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);

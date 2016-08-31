@@ -24,39 +24,19 @@ public class RelationDB {
         this.name=name;
         this.idNameMatch=idNameMatch;
     }
-
     public String getIdNameMatch() {
         return idNameMatch;
     }
-
-    
-    
     public String getTable() {
         return table;
     }
-
     public Map<String, String> getValues() {
         return values;
     }   
-
     public String getName() {
         return name;
     }
     public String getidName() {
         return idNameMatch;
     }
-    
-    /*
-    public String insertRelationData(String valitem,String valitem2 ) {//idMatch1=idProducto
-       return "insert into "+table+"("+this.idNameMatch+","+this.idNameMatchItem+")"+ " values("+valitem+","+valitem2+")";
-        
-    }
-    public String deleteRelationData(String valitem,String valitem2) {
-         return "delete from "+table+" where "+this.idNameMatch+"="+valitem+"  and "+ this.idNameMatchItem +"="+valitem2;
-        
-    }
-    
-    public String UpdateInfo(){
-        return "Update"
-    }*/
 }

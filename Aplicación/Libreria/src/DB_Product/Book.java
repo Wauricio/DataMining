@@ -22,10 +22,10 @@ import libreria.DataBase;
  */
 public class Book implements Item{
     DataBase db;
-    private String idTableName="idlibro";
-    private  String driver="org.postgresql.Driver", url="jdbc:postgresql://localhost:5432/",dbname="Libros",dbUser="postgres",dbPwd="root"; 
-     private String[] type_sales={} ;
-    private String[] type_search={"Nombre","Costo","Autor","Editorial","Genero"} ;
+    private final String idTableName="idlibro";
+    private final  String driver="org.postgresql.Driver", url="jdbc:postgresql://localhost:5432/",dbname="Libros",dbUser="postgres",dbPwd="root"; 
+    private final String[] type_sales={} ;
+    private final String[] type_search={"Nombre","Costo","Autor","Editorial","Genero"} ;
     
     public Book()throws Exception{
        db=new DataBase(url,dbname,driver,dbUser,dbPwd);
@@ -181,6 +181,11 @@ public class Book implements Item{
     @Override
     public ResultSet getAllMatch() throws SQLException {
        return DataBase.executeSQL(db.getConnection(),"select l.idlibro ,l.nombre , l.costo,l.existencias , g.nombre from libro l , genero g where l.idgenero=g.idgenero");
+    }
+
+    @Override
+    public HashMap<String, String> getToSale(String id) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     

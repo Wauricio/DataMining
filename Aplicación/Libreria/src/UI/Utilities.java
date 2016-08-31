@@ -22,7 +22,7 @@ import libreria.DataBase;
 public class Utilities {
     
     
-    /*Set Information on table*/
+    /*Set Information in table*/
      public static void setDataOnTable(ResultSet rs, DefaultTableModel modelo) throws SQLException
     {
         setColumns(rs.getMetaData(), modelo);
@@ -32,17 +32,13 @@ public class Utilities {
     
     
     public static void setColumns(ResultSetMetaData rsmd,final DefaultTableModel modelo) throws  SQLException {
-         //Map<String,String> col=new HashMap<String,String>();
-       // ResultSetMetaData rsmd = conn.createStatement().executeQuery("select * from "+table).getMetaData();
        int numCol = rsmd.getColumnCount();
        Object[] eti = new Object[numCol];
         for(int i=0;i<numCol;i++)
             eti[i]=rsmd.getColumnLabel(i+1);
         modelo.setColumnIdentifiers(eti);
-         
     }
-    public static void addData(ResultSet rs,
-                final DefaultTableModel modelo)
+    public static void addData(ResultSet rs, final DefaultTableModel modelo)
     {
             int RowNum = 0;
             try
