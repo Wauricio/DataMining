@@ -24,7 +24,7 @@ public class Book implements Item{
     DataBase db;
     private final String idTableName="idlibro";
     private final  String driver="org.postgresql.Driver", url="jdbc:postgresql://localhost:5432/",dbname="Libros",dbUser="postgres",dbPwd="root"; 
-    private final String[] type_sales={} ;
+    private final String[] type_sales={"IdVenta","Fecha","Empleado"} ;
     private final String[] type_search={"Nombre","Costo","Autor","Editorial","Genero"} ;
     
     public Book()throws Exception{
@@ -33,7 +33,7 @@ public class Book implements Item{
 
     @Override
     public ResultSet getAll() throws SQLException {
-        return DataBase.executeSQL(db.getConnection(),"select * from libro");
+        return DataBase.executeSQL(db.getConnection(),"select * from libro order by idlibro");
     }
 
     @Override
@@ -63,18 +63,34 @@ public class Book implements Item{
                 break;
             
         }
+      System.out.println("sales type");
        return DataBase.executeSQL(db.getConnection(), qry);
         
     }
 
     @Override
     public ResultSet getAllSales() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return DataBase.executeSQL(db.getConnection(),"select v.idVenta , l.nombre as Titulo, v.Monto ,v.fecha , e.nombre as Empleado  from venta v , empleado e , libro l ,libroventa lv where v.idEmpleado=e.idEmpleado " +
+       "and lv.idVenta=v.idVenta and lv.idLibro=l.idLibro order by v.idVenta");
+              
     }
 
     @Override
-    public ResultSet getSalesByType(String values ,String type) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResultSet getSalesByType(String value ,String type) throws SQLException {
+        String qry="select v.idVenta , l.nombre as Titulo, v.Monto ,v.fecha , e.nombre as Empleado  from venta v , empleado e , libro l ,libroventa lv where v.idEmpleado=e.idEmpleado " +
+       "and lv.idVenta=v.idVenta and lv.idLibro=l.idLibro ";
+        switch(type.toLowerCase()){
+            case "idventa":
+                qry+=" and v.idVenta="+value;
+                break;
+            case "fecha":
+                qry+=" and v.fecha='"+value+"'";
+                break;
+            case "empleado":
+                qry+=" and e.nombre like '%"+value.toUpperCase()+"%' ";
+                break;
+        }
+        return DataBase.executeSQL(db.getConnection(), qry + " order by v.idVenta ");
     }
 
 
@@ -185,7 +201,16 @@ public class Book implements Item{
 
     @Override
     public HashMap<String, String> getToSale(String id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HashMap<String , String> data = new HashMap<String,String>();
+        ResultSet rst = DataBase.executeSQL(db.getConnection(),"select * from "+getTableName()+" where "+getNameID_DB()+"="+id);
+       if(rst.next()){
+        data.put("id",rst.getString(getNameID_DB()));
+        data.put("name",rst.getString("nombre"));
+        data.put("cost", rst.getString("costo"));   
+           
+       }
+        return data;
+    
     }
     
     

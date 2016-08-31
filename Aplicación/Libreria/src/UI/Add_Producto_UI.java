@@ -93,12 +93,11 @@ public class Add_Producto_UI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-      if(jComboBox1.getSelectedIndex()>0){
+
          AddItem_UI add = new AddItem_UI();
          jScrollPane1.setViewportView(add);
          add.setVisible(true);
-         add.initProduc(items.get(jComboBox1.getSelectedItem().toString()));
-        }  
+         add.initProduc(items.get(jComboBox1.getSelectedItem().toString())); 
        System.out.println(jComboBox1.getSelectedItem().toString());
         
     }//GEN-LAST:event_jComboBox1ItemStateChanged
