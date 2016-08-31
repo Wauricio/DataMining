@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JPanel;
 import libreria.DataBase;
 
 /**
@@ -20,11 +19,11 @@ import libreria.DataBase;
  * @author Wauricio
  */
 public class Comic implements Item {
-     private DataBase db;
-     private String idTableName="idComic";
-    private  String driver="com.mysql.jdbc.Driver" , url= "jdbc:mysql://localhost:3306/",dbname="comics",dbUser="root",dbPwd="root"; 
-    private String[] type_sales={"Fecha","Empleado","IDVenta"} ;
-    private String[] type_search={"Titulo","Costo","Fecha","Autor","Tema", "Saga"} ;
+    final private DataBase db;
+    final private String idTableName="idComic";
+    final private  String driver="com.mysql.jdbc.Driver" , url= "jdbc:mysql://localhost:3306/",dbname="comics",dbUser="root",dbPwd="root"; 
+    final private String[] type_sales={"Fecha","Empleado","IDVenta"} ;
+    final private String[] type_search={"Titulo","Costo","Fecha","Autor","Tema", "Saga"} ;
     
     
     
@@ -69,25 +68,21 @@ public class Comic implements Item {
             default :
                 qry="select * from "+getTableName();
                 break;   
-            
         }
         System.out.println(qry);
-        //throw new UnsupportedOperationException("Not supported yet.");
-        return DataBase.executeSQL(db.getConnection(), qry);
-        
+        return DataBase.executeSQL(db.getConnection(), qry); 
     }
 
     @Override
     public ResultSet getAllSales() throws SQLException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                return  db.getConnection().createStatement().executeQuery("select s.* , from venta");
+    return  db.getConnection().createStatement().executeQuery("select s.* , from venta");
 
     }
 
     @Override
     public ResultSet getSalesByType(String Value, String Type) throws SQLException {
-       String qry="select s.idVenta , s.monto , s.fecha , c.titulo , cv.cantidad , e.nombre as Empleado from venta s , comic c , comicventa cv , empleado e \n" +
-"where s.idVenta=cv.idVenta and c.idComic=cv.idComic and e.idEmpleado=s.Empleado_idEmpleado ";
+       String qry="select s.idVenta , s.monto , s.fecha , c.titulo , cv.cantidad , e.nombre as Empleado from venta s , comic c , comicventa cv , empleado e " +
+"where s.idVenta=cv.idVenta and c.idComic=cv.idComic and e.idEmpleado=s.idEmpleado ";
        switch(Type.toLowerCase()){
            case "fecha":
                qry+="and s.fecha like '%"+Value.toLowerCase()+"%'";
@@ -99,9 +94,9 @@ public class Comic implements Item {
                qry+= " and e.nombre like '%"+Value.toLowerCase()+"%' or e.apellidoP like '%"+Value.toLowerCase()+"%' or e.apellidoM like '%"+Value.toLowerCase()+"%'";
                break;
            default:
-               break;
-               
+               break;  
        }
+       qry+= " order by s.idVenta ";
        return DataBase.executeSQL(db.getConnection(),qry);
     }
 
@@ -193,7 +188,6 @@ public class Comic implements Item {
             saga.put(rst.getString("nombre")+rst.getString("editorial"),rst.getString("idSaga"));
         }
         rl.add(new RelationDB("SAGA","comicSaga",saga));/**/
-        
         return rl;
        }catch(SQLException  e){
            e.printStackTrace();
@@ -227,6 +221,20 @@ public class Comic implements Item {
     public ResultSet getAllMatch() throws SQLException {
        return  db.getConnection().createStatement().executeQuery("select c.idComic as ID ,  c.titulo as TITULO ,c.Costo as COSTO , c.existencias as EJEMPLARES , t.nombre as GENEROTEMA from Comic c , saga s , tema t , comictema ct  where c.idSaga=s.idSaga and ct.idcomic=c.idcomic and t.idtema=ct.idtema");
    }
+
+    @Override
+    public HashMap<String, String> getToSale(String id)throws SQLException  {
+        HashMap<String , String> data = new HashMap<String,String>();
+        ResultSet rst = DataBase.executeSQL(db.getConnection(),"select * from "+getTableName()+" where "+getNameID_DB()+"="+id);
+       if(rst.next()){
+        data.put("id",rst.getString(getNameID_DB()));
+        data.put("name",rst.getString("titulo"));
+        data.put("cost", rst.getString("costo"));   
+           
+       }
+        return data;
+    }
+
 
 
     

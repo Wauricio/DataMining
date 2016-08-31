@@ -25,9 +25,11 @@ import javax.swing.JFrame;
 public class Principal_UI extends javax.swing.JFrame {
    final private Map<String , Item> items = new HashMap<String , Item>();
     final DefaultTableModel model = new DefaultTableModel();
+    final Sale_UI sale;
     
     public Principal_UI() {
         initComponents();
+        sale=new Sale_UI();
         try{
         items.put("Comics",new Comic());
         items.put("Libros",new Book());
@@ -80,8 +82,8 @@ public class Principal_UI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -130,8 +132,12 @@ public class Principal_UI extends javax.swing.JFrame {
             }
         });
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        jButton2.setText("Add Carrito");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jMenu2.setText("Opciones");
 
@@ -160,6 +166,11 @@ public class Principal_UI extends javax.swing.JFrame {
         jMenu2.add(jMenuItem3);
 
         jMenuItem1.setText("Crear Venta");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
@@ -184,7 +195,10 @@ public class Principal_UI extends javax.swing.JFrame {
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButton2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addGap(25, 25, 25)))
@@ -207,7 +221,9 @@ public class Principal_UI extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton2))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -223,26 +239,25 @@ public class Principal_UI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-      // new Modify_UI(items.get("Comics")).setVisible(true);
-      if(jComboBox1.getSelectedIndex()>0  ){
-          if(jTable1.getSelectedRow()>-1){
+      if(jComboBox1.getSelectedIndex()>0  )
+      {
+            if(jTable1.getSelectedRow()>-1)
+            {
                 AddItem_UI add = new AddItem_UI();
                 add.initUpdate(items.get(jComboBox1.getSelectedItem()),model.getValueAt(jTable1.getSelectedRow(), 0).toString());
                 this.add(add);
                 add.setVisible(true);
-               JFrame frame = new JFrame("Modificar");
-              frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-              frame.getContentPane().add(add, BorderLayout.CENTER);
-              frame.pack();
-              frame.setVisible(true);
-             }
-          
+                JFrame frame = new JFrame("Modificar");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.getContentPane().add(add, BorderLayout.CENTER);
+                frame.pack();
+                frame.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Error :Seleccione Un Producto", "Error",JOptionPane.ERROR_MESSAGE);
+            }     
       }
-      
-      
-      
-      
-      
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
@@ -268,23 +283,11 @@ public class Principal_UI extends javax.swing.JFrame {
              for (Map.Entry<String,Item> entry : items.entrySet()) {
                     Utilities.addData(entry.getValue().getAllMatch(), model);
                 }
-              
-              
+
           }
-            
-            
-            
-            
-            
-            
-            
-            
         }catch(Exception e){
             e.printStackTrace();
-        }
-        
-        
-        
+        }     
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -306,10 +309,38 @@ public class Principal_UI extends javax.swing.JFrame {
                 JOptionPane.ERROR_MESSAGE);
             }
         }
-        
-        
-        
+
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+
+        sale.setVisible(true);
+        sale.deleteItems();
+        
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         if(jComboBox1.getSelectedIndex()>0  )
+      {
+            if(jTable1.getSelectedRow()>-1)
+            {
+                try{
+                
+               sale.setItem(items.get(jComboBox1.getSelectedItem()).getToSale(model.getValueAt(jTable1.getSelectedRow(), 0).toString()),jComboBox1.getSelectedItem().toString());
+            
+                }catch(SQLException e){
+                    JOptionPane.showMessageDialog(null,"Error :Ocurrio Un Problema al Agregar Producto", "Error",JOptionPane.ERROR_MESSAGE);
+                    e.printStackTrace();
+                }
+                    
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Error :Seleccione Un Producto", "Error",JOptionPane.ERROR_MESSAGE);
+            }     
+      }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -349,12 +380,12 @@ public class Principal_UI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;

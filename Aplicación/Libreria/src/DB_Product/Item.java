@@ -8,6 +8,7 @@ package DB_Product;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 import libreria.DataBase;
@@ -21,10 +22,8 @@ public interface Item {
     public String getTableName();
     public ArrayList<RelationDB> getRelations();
     public String getNameID_DB();
-    
-    
-    
-    /*catalog*/
+
+    /*Catalog*/
     public ResultSet getAllMatch() throws SQLException;
      public ResultSet getAll() throws SQLException;
     public ResultSet searchbyType(String value , String type)throws SQLException ;
@@ -36,8 +35,8 @@ public interface Item {
     public ResultSet getAllSales()throws SQLException;
     public ResultSet getSalesByType(String value,String Type)throws SQLException;
     public String[]  getSales_Type();
-   
-    /*Insert*/
+    public HashMap<String,String> getToSale(String id) throws SQLException;   
+    /*DBOperations*/
     
     public void insertData(String table , Map<String,String> vales)throws SQLException;
     public void insertProduc()throws SQLException;
