@@ -47,7 +47,7 @@ public class Comic implements Item {
                 qry="select * from "+getTableName() +" where titulo like'%"+value.toLowerCase()+"%'";
                 break;
             case "costo":
-                qry= "select * from "+ getTableName() + " where costo like '%"+value.toLowerCase()+"%'";
+                qry= "select * from "+ getTableName() + " where costo BETWEEN "+value.substring(0,value.indexOf("-"))+" and "+value.substring(value.indexOf("-")+1,value.length()) + " order by costo";
                 break;
             case "fecha":
                 qry="select * from "+getTableName()+ " where fechaPublicacion like '%"+value.toLowerCase()+"%'";

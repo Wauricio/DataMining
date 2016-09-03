@@ -64,6 +64,7 @@ public class Book implements Item{
             
         }
       System.out.println("sales type");
+      System.out.println(qry);
        return DataBase.executeSQL(db.getConnection(), qry);
         
     }

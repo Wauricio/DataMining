@@ -40,7 +40,8 @@ public class DataBase {
      return conn;
      }
     
-     public static ResultSet executeSQL (Connection conn, String query) throws SQLException {  
+     public static ResultSet executeSQL (Connection conn, String query) throws SQLException {
+         System.out.println("DB :"+ query);
          return  conn.createStatement().executeQuery(query);
      }  
    
