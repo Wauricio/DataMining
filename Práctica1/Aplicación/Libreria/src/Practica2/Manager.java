@@ -5,12 +5,17 @@
  */
 package Practica2;
 
+import Practica2.Element.FactTable;
+import Practica2.Element.Table;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -88,27 +93,47 @@ public class Manager {
         }
         
     }
-    protected static void setTableDec(final Connection c,String table,final DefaultTableModel model) throws SQLException{
+    protected static String setTableDec(final Connection c,String table,String DB,final DefaultTableModel model) throws SQLException{
         Util.removeData(model);
         ResultSetMetaData rsmd = c.createStatement().executeQuery("select * from "+table).getMetaData();
+        ResultSet r=c.createStatement().executeQuery("SELECT COLUMN_NAME, COLUMN_KEY "
+                + " FROM INFORMATION_SCHEMA.COLUMNS  WHERE TABLE_SCHEMA = \""+DB+"\" "
+                + "AND TABLE_NAME = \""+table+"\"  and COLUMN_KEY IN(\"PRI\", \"UNI\")");
+        String idTable="";
+        if(r.next()){
+            idTable=r.getString("COLUMN_NAME");
+        }
         String[]desc={"NAME","DATA TYPE"};
         model.setColumnIdentifiers(desc);
         int numCol = rsmd.getColumnCount();
         for(int i=1;i<=numCol;i++){
             model.addRow( new Object []{rsmd.getColumnName(i),rsmd.getColumnTypeName(i)});
         }
+        return idTable;
     }
     
+    protected static void setDimensions(Table dim , final DefaultTableModel model , final JLabel label ){
+        Util.removeData(model);
+        model.setColumnIdentifiers(new String[]{"NAME" ,"TYPE","REFERENCES","ID_TABLE"} );
+        HashMap<String,String[]>temp = dim.getAttr();
+        label.setText("NAME : "+dim.getName() + " ID :"+dim.getId()+" ID_TYPE:"+dim.getTypeId());
+        for (Map.Entry<String, String[]> entry : temp.entrySet()) {
+            String inf[]=entry.getValue();
+            model.addRow(new Object[]{entry.getKey(),inf[0],inf[1],inf[2]});
+        }
+    }
+    
+    protected static void setFactTables(FactTable ft,final DefaultTableModel model, final JLabel label ){
+        Util.removeData(model);
+        model.setColumnIdentifiers(new String[]{"DIMENSION'S NAME" ,"ID_DIMESION"} );
+        
+        label.setText("NAME : "+ft.getName() + " SIZE :"+ft.getDimensions().size());
+        for (Map.Entry<String, Table> entry : ft.getDimensions().entrySet()) {
 
-    
-    
-    /*
-    public static  ArrayList<String> getDBTables(final Connection conn ) throws SQLException{
-            ArrayList<String> meta=new ArrayList<>();
-                //String types[] = {"TABLE","VIEW","SYSTEM TABLE","GLOBAL","TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"};};
-                ResultSet rs = conn.getMetaData().getTables(null, null, "%", new String[]{"TABLE"});
-                while (rs.next())
-                    meta.add(rs.getString("TABLE_NAME").toLowerCase());
-           return meta;
-    }*/
+            model.addRow(new Object[]{entry.getKey(),entry.getValue().getId()});
+        }
+
+        
+    }
+ 
 }
